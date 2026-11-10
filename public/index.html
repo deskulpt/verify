@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Biz Verify</title>
+<style>
+  :root { color-scheme: light; }
+  body { background: #fff; font: 15px/1.45 system-ui, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 16px; color: #1d2733; }
+  form { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem 1rem; }
+  label { display: grid; gap: .25rem; font-weight: 600; font-size: 13px; }
+  label.wide, .actions { grid-column: 1 / -1; }
+  label.check { display: flex; align-items: center; gap: .5rem; }
+  input, select { font: inherit; padding: .45rem .55rem; border: 1px solid #b8c2cc; border-radius: 6px; font-weight: 400; }
+  button { font: inherit; padding: .5rem 1rem; border-radius: 6px; border: 1px solid #335075; background: #335075; color: #fff; cursor: pointer; }
+  button.ghost { background: #fff; color: #335075; padding: .25rem .6rem; font-size: 13px; }
+  .card { border: 1px solid #d5dce3; border-radius: 8px; padding: .8rem 1rem; margin: .6rem 0; }
+  .ok { border-color: #2e7d32; background: #f1f8f1; }
+  .no { border-color: #c62828; background: #fdf3f3; }
+  .warn { border-color: #b26a00; background: #fff6e8; } .warn .tag { background: #b26a00; color: #fff; }
+  .summary { font-size: 17px; font-weight: 600; }
+  .tag { font-size: 12px; font-weight: 700; padding: .1rem .45rem; border-radius: 4px; margin-left: .4rem; }
+  .ok .tag { background: #2e7d32; color: #fff; } .no .tag { background: #c62828; color: #fff; } .manual .tag { background: #e6ebf0; }
+  .copies { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .5rem; }
+  small { color: #5b6773; }
+  [hidden] { display: none !important; }
+  @media (max-width: 560px) { form { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<h1>Verify a business</h1>
+<form id="f">
+  <label>Country <select name="country" id="country" required></select></label>
+  <label>Legal name <input name="name" required minlength="3" autocomplete="organization"></label>
+  <label>Registration number <input name="regNumber" id="regNumber"><small id="regHint"></small></label>
+  <label>VAT / tax number <input name="taxId" id="taxId"><small>EU VAT, US EIN or UAE TRN</small></label>
+  <label id="iecWrap" hidden>IEC <input name="iec"></label>
+  <label id="exporterWrap" class="check" hidden><input type="checkbox" name="exporter" id="exporter"> Registered exporter</label>
+  <label>GLN (optional, for GEPIR) <input name="gln"></label>
+  <label class="wide">Street address <input name="address" autocomplete="street-address"></label>
+  <label>City <input name="city" autocomplete="address-level2"></label>
+  <label>Province / State <input name="region" autocomplete="address-level1"></label>
+  <label>Postal code <input name="postalCode" autocomplete="postal-code"></label>
+  <div class="actions"><button>Verify</button> <small id="busy" hidden>Checking sources...</small></div>
+</form>
+
+<section id="out" hidden>
+  <div id="summary" class="card summary"></div>
+  <h2>Verified automatically</h2>
+  <div id="auto"></div>
+  <h2>Verify manually</h2>
+  <p><small>These sites need a CAPTCHA or don't allow automated lookups. Open each one in a new tab. Fields marked in the link are prefilled; copy the rest with the buttons.</small></p>
+  <div id="manual"></div>
+</section>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const LABELS = { name: "Name", regNumber: "Reg. no.", taxId: "Tax no.", iec: "IEC", gln: "GLN", address: "Address", city: "City", region: "Province/State", postalCode: "Postal code", countryName: "Country" };
+let config;
+
+function syncCountry() {
+  const c = $("#country").value, india = c === "IN";
+  $("#regHint").textContent = config.countries[c].idTypes.map((t) => t.label).join(" or ");
+  $("#exporterWrap").hidden = !india;
+  $("#iecWrap").hidden = !(india && $("#exporter").checked);
+}
+
+function formData() {
+  const d = Object.fromEntries(new FormData($("#f")));
+  d.exporter = $("#exporter").checked && d.country === "IN";
+  d.countryName = config.countries[d.country].name;
+  for (const k in d) if (typeof d[k] === "string") d[k] = d[k].trim();
+  return d;
+}
+
+function renderAuto(r) {
+  if (r.error) return `<div class="card no"><b>${esc(r.name)}</b><span class="tag">ERROR</span><br><small>${esc(r.error)}</small></div>`;
+  if (r.skipped) return `<div class="card manual"><b>${esc(r.name)}</b><span class="tag">SKIPPED</span><br><small>${esc(r.skipped)}</small></div>`;
+  if (r.match) {
+    const m = r.match, live = r.outcome === "verified";
+    return `<div class="card ${live ? "ok" : "warn"}"><b>${esc(r.name)}</b><span class="tag">${live ? "VERIFIED" : "INACTIVE"}</span><br>
+      ${esc(m.legalName ?? r.note)} &middot; ${esc(m.status)}<br>
+      <small>${m.ids.map((i) => `${esc(i.type)} ${esc(i.value)}`).join(" &middot; ")}<br>${esc(m.address)}</small><br>
+      <a href="${esc(m.url)}" target="_blank" rel="noopener">View record</a></div>`;
+  }
+  const cands = r.candidates.map((c) => `<li>${esc(c.legalName)} <small>(${c.ids.map((i) => esc(i.value)).join(", ")})</small></li>`).join("");
+  return `<div class="card no"><b>${esc(r.name)}</b><span class="tag">NOT FOUND</span>
+    ${cands ? `<br><small>Close matches:</small><ul>${cands}</ul>` : "<br><small>No record with this name or number.</small>"}</div>`;
+}
+
+function renderManual(r, d) {
+  const url = r.url.replace(/\{(\w+)\}/g, (_, k) => encodeURIComponent(d[k] ?? ""));
+  const copies = r.copy.filter((k) => d[k]).map((k) =>
+    `<button type="button" class="ghost" data-copy="${esc(d[k])}">Copy ${esc(LABELS[k] ?? k)}</button>`).join("");
+  return `<div class="card manual"><b>${esc(r.name)}</b><span class="tag">MANUAL</span>
+    <div class="copies"><button type="button" data-open="${esc(url)}" data-first="${esc(d[r.copy.find((k) => d[k])] ?? "")}">Open in new tab</button>${copies}</div></div>`;
+}
+
+document.addEventListener("click", async (e) => {
+  const b = e.target.closest("button[data-open], button[data-copy]");
+  if (!b) return;
+  // Opening a tab copies the first field too, so it is ready to paste into the site's form
+  const text = b.dataset.copy ?? b.dataset.first;
+  if (text) try { await navigator.clipboard.writeText(text); } catch {}
+  if (b.dataset.open) window.open(b.dataset.open, "_blank", "noopener");
+  else { const t = b.textContent; b.textContent = "Copied"; setTimeout(() => (b.textContent = t), 1200); }
+});
+
+$("#f").addEventListener("change", (e) => { if (e.target.name === "country" || e.target.name === "exporter") syncCountry(); });
+
+$("#f").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const d = formData();
+  $("#busy").hidden = false;
+  try {
+    const res = await fetch("/api/verify", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(d) });
+    const body = await res.json();
+    if (!res.ok) throw new Error(body.error);
+    const s = body.summary;
+    const text = {
+      verified: `Verified (${s.confidence} confidence) by ${s.verifiedBy.length} source${s.verifiedBy.length > 1 ? "s" : ""}`,
+      inactive: "Found, but registered as inactive / dissolved",
+      unverified: "Not verified automatically: check the manual sources below",
+    }[s.status];
+    const warn = s.status === "verified" && s.inactiveIn.length ? ` &middot; inactive in ${s.inactiveIn.length} other source(s)` : "";
+    $("#summary").className = `card summary ${{ verified: "ok", inactive: "warn", unverified: "no" }[s.status]}`;
+    $("#summary").innerHTML = esc(text) + warn;
+    $("#auto").innerHTML = body.results.filter((r) => r.mode === "auto").map(renderAuto).join("");
+    $("#manual").innerHTML = body.results.filter((r) => r.mode === "manual").map((r) => renderManual(r, d)).join("");
+    $("#out").hidden = false;
+  } catch (err) {
+    alert(`Verify failed: ${err.message}`);
+  } finally {
+    $("#busy").hidden = true;
+  }
+});
+
+fetch("/api/config").then((r) => r.json()).then((c) => {
+  config = c;
+  $("#country").innerHTML = Object.entries(c.countries).sort((a, b) => a[1].name.localeCompare(b[1].name)).map(([k, v]) => `<option value="${k}">${esc(v.name)}</option>`).join("");
+  syncCountry();
+});
+</script>
+</body>
+</html>

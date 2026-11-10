@@ -1,0 +1,930 @@
+{
+  "countries": {
+    "US": {
+      "name": "United States",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "State entity ID / SEC CIK"
+        },
+        {
+          "id": "EIN",
+          "label": "EIN (tax ID)"
+        }
+      ]
+    },
+    "CA": {
+      "name": "Canada",
+      "idTypes": [
+        {
+          "id": "BN",
+          "label": "Business Number (9 digits)"
+        },
+        {
+          "id": "CORP",
+          "label": "Corporation / registry ID"
+        }
+      ]
+    },
+    "IN": {
+      "name": "India",
+      "idTypes": [
+        {
+          "id": "CIN",
+          "label": "CIN / LLPIN"
+        },
+        {
+          "id": "IEC",
+          "label": "Importer-Exporter Code (IEC)"
+        }
+      ]
+    },
+    "BR": {
+      "name": "Brazil",
+      "idTypes": [
+        {
+          "id": "CNPJ",
+          "label": "CNPJ (14 digits)"
+        }
+      ]
+    },
+    "AE": {
+      "name": "United Arab Emirates",
+      "idTypes": [
+        {
+          "id": "LICENSE",
+          "label": "Trade licence number"
+        },
+        {
+          "id": "TRN",
+          "label": "Tax registration number (TRN)"
+        }
+      ]
+    },
+    "AT": {
+      "name": "Austria",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "BE": {
+      "name": "Belgium",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "BG": {
+      "name": "Bulgaria",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "HR": {
+      "name": "Croatia",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "CY": {
+      "name": "Cyprus",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "CZ": {
+      "name": "Czechia",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "ICO (8 digits)"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "DK": {
+      "name": "Denmark",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "EE": {
+      "name": "Estonia",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "FI": {
+      "name": "Finland",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Business ID (Y-tunnus)"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "FR": {
+      "name": "France",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "SIREN (9 digits)"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "DE": {
+      "name": "Germany",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "GR": {
+      "name": "Greece",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "HU": {
+      "name": "Hungary",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "IE": {
+      "name": "Ireland",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "IT": {
+      "name": "Italy",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "LV": {
+      "name": "Latvia",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "LT": {
+      "name": "Lithuania",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "LU": {
+      "name": "Luxembourg",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "MT": {
+      "name": "Malta",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "NL": {
+      "name": "Netherlands",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "PL": {
+      "name": "Poland",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "PT": {
+      "name": "Portugal",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "RO": {
+      "name": "Romania",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "SK": {
+      "name": "Slovakia",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "SI": {
+      "name": "Slovenia",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "ES": {
+      "name": "Spain",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "SE": {
+      "name": "Sweden",
+      "region": "EU",
+      "idTypes": [
+        {
+          "id": "REG",
+          "label": "Company register number"
+        },
+        {
+          "id": "VAT",
+          "label": "VAT number"
+        }
+      ]
+    },
+    "SG": {
+      "name": "Singapore",
+      "idTypes": [
+        {
+          "id": "UEN",
+          "label": "UEN"
+        }
+      ]
+    },
+    "NO": {
+      "name": "Norway",
+      "idTypes": [
+        {
+          "id": "ORGNR",
+          "label": "Organisasjonsnummer (9 digits)"
+        },
+        {
+          "id": "VAT",
+          "label": "MVA number"
+        }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "id": "gleif",
+      "name": "GLEIF (LEI registry)",
+      "countries": [
+        "*"
+      ],
+      "mode": "auto"
+    },
+    {
+      "id": "sec-edgar",
+      "name": "SEC EDGAR (US public filers)",
+      "countries": [
+        "US"
+      ],
+      "mode": "auto"
+    },
+    {
+      "id": "ny-dos",
+      "name": "New York Dept. of State",
+      "countries": [
+        "US"
+      ],
+      "mode": "auto"
+    },
+    {
+      "id": "co-sos",
+      "name": "Colorado Secretary of State",
+      "countries": [
+        "US"
+      ],
+      "mode": "auto"
+    },
+    {
+      "id": "orgbook-bc",
+      "name": "OrgBook BC (British Columbia)",
+      "countries": [
+        "CA"
+      ],
+      "mode": "auto"
+    },
+    {
+      "id": "vies",
+      "name": "EU VIES VAT validation",
+      "countries": [
+        "EU"
+      ],
+      "mode": "auto",
+      "needs": "taxId"
+    },
+    {
+      "id": "fr-sirene",
+      "name": "France: Recherche d'entreprises (INSEE Sirene)",
+      "countries": [
+        "FR"
+      ],
+      "mode": "auto"
+    },
+    {
+      "id": "cz-ares",
+      "name": "Czechia: ARES",
+      "countries": [
+        "CZ"
+      ],
+      "mode": "auto"
+    },
+    {
+      "id": "fi-prh",
+      "name": "Finland: PRH / YTJ",
+      "countries": [
+        "FI"
+      ],
+      "mode": "auto"
+    },
+    {
+      "id": "brasilapi",
+      "name": "Brazil: Receita Federal CNPJ (via BrasilAPI)",
+      "countries": [
+        "BR"
+      ],
+      "mode": "auto",
+      "needs": "regNumber"
+    },
+    {
+      "id": "ct-sots",
+      "name": "Connecticut Secretary of the State",
+      "countries": [
+        "US"
+      ],
+      "mode": "auto"
+    },
+    {
+      "id": "or-sos",
+      "name": "Oregon Secretary of State (active businesses)",
+      "countries": [
+        "US"
+      ],
+      "mode": "auto"
+    },
+    {
+      "id": "sg-acra",
+      "name": "Singapore ACRA (data.gov.sg)",
+      "countries": [
+        "SG"
+      ],
+      "mode": "auto"
+    },
+    {
+      "id": "ee-rik",
+      "name": "Estonia e-Business Register (RIK)",
+      "countries": [
+        "EE"
+      ],
+      "mode": "auto"
+    },
+    {
+      "id": "no-brreg",
+      "name": "Norway Brønnøysund Register",
+      "countries": [
+        "NO"
+      ],
+      "mode": "auto"
+    },
+    {
+      "id": "cc-federal",
+      "name": "Corporations Canada federal search",
+      "countries": [
+        "CA"
+      ],
+      "mode": "manual",
+      "url": "https://ised-isde.canada.ca/cc/lgcy/fdrlCrpSrch.html",
+      "copy": [
+        "name",
+        "regNumber"
+      ]
+    },
+    {
+      "id": "cbr",
+      "name": "Canada's Business Registries",
+      "countries": [
+        "CA"
+      ],
+      "mode": "manual",
+      "url": "https://ised-isde.canada.ca/cbr-rec/results?q={name}",
+      "copy": [
+        "name",
+        "regNumber"
+      ]
+    },
+    {
+      "id": "ised-cid",
+      "name": "Canadian Company Capabilities (ISED)",
+      "countries": [
+        "CA"
+      ],
+      "mode": "manual",
+      "url": "https://ised-isde.canada.ca/app/ixb/cid-bdic/searchProduct.html?lang=eng",
+      "copy": [
+        "name"
+      ]
+    },
+    {
+      "id": "mca-name",
+      "name": "MCA company / LLP name search",
+      "countries": [
+        "IN"
+      ],
+      "mode": "manual",
+      "url": "https://www.mca.gov.in/content/mca/global/en/mca/fo-llp-services/company-llp-name-search.html",
+      "copy": [
+        "name"
+      ]
+    },
+    {
+      "id": "mca-cin",
+      "name": "MCA find CIN",
+      "countries": [
+        "IN"
+      ],
+      "mode": "manual",
+      "url": "https://www.mca.gov.in/content/mca/global/en/mca/fo-llp-services/findCinFinalSingleCom.html",
+      "copy": [
+        "name",
+        "regNumber"
+      ]
+    },
+    {
+      "id": "dgft-iec",
+      "name": "DGFT IEC lookup",
+      "countries": [
+        "IN"
+      ],
+      "when": "exporter",
+      "mode": "manual",
+      "url": "https://www.dgft.gov.in/CP/?opt=view-any-ice",
+      "copy": [
+        "iec",
+        "name"
+      ]
+    },
+    {
+      "id": "quickcompany",
+      "name": "QuickCompany (third party)",
+      "countries": [
+        "IN"
+      ],
+      "mode": "manual",
+      "url": "https://www.quickcompany.in/company?q={name}",
+      "copy": [
+        "name",
+        "regNumber"
+      ]
+    },
+    {
+      "id": "delaware",
+      "name": "Delaware Division of Corporations",
+      "countries": [
+        "US"
+      ],
+      "mode": "manual",
+      "url": "https://icis.corp.delaware.gov/ecorp/entitysearch/namesearch.aspx",
+      "copy": [
+        "name",
+        "regNumber"
+      ]
+    },
+    {
+      "id": "ca-bizfile",
+      "name": "California bizfile",
+      "countries": [
+        "US"
+      ],
+      "mode": "manual",
+      "url": "https://bizfileonline.sos.ca.gov/search/business",
+      "copy": [
+        "name",
+        "regNumber"
+      ]
+    },
+    {
+      "id": "sam",
+      "name": "SAM.gov entity search",
+      "countries": [
+        "US"
+      ],
+      "mode": "manual",
+      "url": "https://sam.gov/search/?index=ei&keywords={name}",
+      "copy": [
+        "name",
+        "taxId"
+      ]
+    },
+    {
+      "id": "eu-bris",
+      "name": "EU e-Justice business registers (BRIS)",
+      "countries": [
+        "EU"
+      ],
+      "mode": "manual",
+      "url": "https://e-justice.europa.eu/489/EN/business_registers__search_for_a_company_in_the_eu",
+      "copy": [
+        "name",
+        "regNumber"
+      ]
+    },
+    {
+      "id": "receita-cnpj",
+      "name": "Receita Federal CNPJ card",
+      "countries": [
+        "BR"
+      ],
+      "mode": "manual",
+      "url": "https://solucoes.receita.fazenda.gov.br/servicos/cnpjreva/cnpjreva_solicitacao.asp",
+      "copy": [
+        "regNumber"
+      ]
+    },
+    {
+      "id": "ae-ner",
+      "name": "UAE National Economic Register",
+      "countries": [
+        "AE"
+      ],
+      "mode": "manual",
+      "url": "https://ner.economy.ae/",
+      "copy": [
+        "name",
+        "regNumber"
+      ]
+    },
+    {
+      "id": "ae-fta",
+      "name": "UAE FTA TRN verification",
+      "countries": [
+        "AE"
+      ],
+      "mode": "manual",
+      "url": "https://tax.gov.ae/en/services/trn.verification.aspx",
+      "copy": [
+        "taxId",
+        "name"
+      ]
+    },
+    {
+      "id": "ae-adgm",
+      "name": "ADGM public registers",
+      "countries": [
+        "AE"
+      ],
+      "mode": "manual",
+      "url": "https://www.adgm.com/public-registers",
+      "copy": [
+        "name",
+        "regNumber"
+      ]
+    },
+    {
+      "id": "ae-difc",
+      "name": "DIFC public register",
+      "countries": [
+        "AE"
+      ],
+      "mode": "manual",
+      "url": "https://www.difc.com/business/public-register",
+      "copy": [
+        "name",
+        "regNumber"
+      ]
+    },
+    {
+      "id": "nl-kvk",
+      "name": "Netherlands KvK trade register (Chamber of Commerce)",
+      "countries": [
+        "NL"
+      ],
+      "mode": "manual",
+      "url": "https://www.kvk.nl/zoeken/?q={name}",
+      "copy": [
+        "name",
+        "regNumber"
+      ]
+    },
+    {
+      "id": "it-registro",
+      "name": "Italy Registro Imprese (Chambers of Commerce)",
+      "countries": [
+        "IT"
+      ],
+      "mode": "manual",
+      "url": "https://www.registroimprese.it/",
+      "copy": [
+        "name",
+        "regNumber",
+        "taxId"
+      ]
+    },
+    {
+      "id": "at-wko",
+      "name": "Austria WKO Firmen A-Z (Chamber of Commerce)",
+      "countries": [
+        "AT"
+      ],
+      "mode": "manual",
+      "url": "https://firmen.wko.at/SearchSimple.aspx",
+      "copy": [
+        "name",
+        "city"
+      ]
+    },
+    {
+      "id": "ae-dubai-chamber",
+      "name": "Dubai Chambers (members)",
+      "countries": [
+        "AE"
+      ],
+      "mode": "manual",
+      "url": "https://www.dubaichambercommerce.com/en/",
+      "copy": [
+        "name",
+        "regNumber"
+      ]
+    },
+    {
+      "id": "sg-bizfile",
+      "name": "Singapore Bizfile (ACRA)",
+      "countries": [
+        "SG"
+      ],
+      "mode": "manual",
+      "url": "https://www.bizfile.gov.sg/",
+      "copy": [
+        "regNumber",
+        "name"
+      ]
+    },
+    {
+      "id": "icc-chambers",
+      "name": "ICC World Chambers directory (find the local chamber)",
+      "countries": [
+        "*"
+      ],
+      "mode": "manual",
+      "url": "https://iccwbo.org/world-chambers/",
+      "copy": [
+        "name",
+        "countryName"
+      ]
+    },
+    {
+      "id": "opencorporates",
+      "name": "OpenCorporates",
+      "countries": [
+        "*"
+      ],
+      "mode": "manual",
+      "url": "https://opencorporates.com/companies?q={name}",
+      "copy": [
+        "name",
+        "regNumber"
+      ]
+    },
+    {
+      "id": "gepir",
+      "name": "GS1 GEPIR",
+      "countries": [
+        "*"
+      ],
+      "mode": "manual",
+      "url": "https://www.gs1us.org/tools/gs1-company-database-gepir",
+      "copy": [
+        "name",
+        "gln"
+      ]
+    },
+    {
+      "id": "dnb-duns",
+      "name": "D&B D-U-N-S lookup",
+      "countries": [
+        "*"
+      ],
+      "mode": "manual",
+      "url": "https://www.dnb.com/en-ca/smb/duns/duns-lookup-form.html",
+      "copy": [
+        "name",
+        "address",
+        "city",
+        "region",
+        "postalCode",
+        "countryName"
+      ]
+    },
+    {
+      "id": "dnb-directory",
+      "name": "D&B business directory",
+      "countries": [
+        "*"
+      ],
+      "mode": "manual",
+      "url": "https://www.dnb.com/business-directory.html",
+      "copy": [
+        "name",
+        "city"
+      ]
+    }
+  ]
+}
