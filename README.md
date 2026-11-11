@@ -21,6 +21,7 @@ Open http://localhost:3000.
 | `API_KEY` | for `/v1` | Shared secret for the `/v1` API (`x-api-key` header). Unset = `/v1` refuses every request. |
 | `CONTACT_EMAIL` | for SEC | SEC EDGAR requires a contact in the User-Agent. Unset = SEC source shows an error, others still run. |
 | `EUIPO_CLIENT_ID`, `EUIPO_CLIENT_SECRET` | for EU trademarks | Free from the [EUIPO API portal](https://dev.euipo.europa.eu): create an app, subscribe it to "Trademark search". Unset = trademark card shows SKIPPED. |
+| `ISED_API_KEY` | for Canada federal | Free `user-key` from the [ISED API Catalogue](https://api.ised-isde.canada.ca/en/docs?api=corporations) (Federal Corporation API, Public Plan, 60 hits/min). Unset = SKIPPED. |
 | `PORT` | no | Default `3000`. |
 | `DB_FILE` | no | SQLite history file. Default `data/bizverify.db`. |
 
@@ -115,6 +116,7 @@ Cron, daily 03:00:
 | SEC EDGAR | US (needs `CONTACT_EMAIL`) |
 | New York, Colorado, Connecticut, Oregon Secretaries of State | US |
 | OrgBook BC | CA |
+| Corporations Canada (federal, ISED API) | CA (needs corporation number like `000100-7`, or BN9/BN15; needs `ISED_API_KEY`) |
 | EU VIES VAT validation | EU (needs VAT number) |
 | INSEE Sirene / ARES / PRH-YTJ / RIK | FR / CZ / FI / EE |
 | Singapore ACRA | SG |

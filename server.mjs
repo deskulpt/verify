@@ -155,6 +155,31 @@ const auto = {
     }));
   },
 
+  // Federal corporations only; lookup by corporation number ("000100-7") or business number (BN9 or BN15).
+  async "cc-api"(form) {
+    const digits = form.regNumber.replace(/\D/g, "");
+    const key = digits.length >= 9 ? digits.slice(0, 9) : digits.replace(/^0+/, "");
+    const d = await getJson(`https://apigateway-passerelledapi.ised-isde.canada.ca/corporations/api/v1/corporations/${key}.json?lang=eng`, {
+      headers: { "user-key": process.env.ISED_API_KEY },
+    });
+    return (d ?? []).filter((c) => c?.corporationNames).map((c) => { // not-found = strings; lang=eng also pads with null
+      const names = c.corporationNames.map((n) => n.CorporationName).filter((n) => n.current).map((n) => n.name);
+      const a = c.adresses?.[0]?.address;
+      return {
+        legalName: names[0],
+        aliases: names.slice(1),
+        ids: [
+          { type: "CORP NO", value: c.corporationId },
+          c.businessNumbers?.businessNumber && { type: "BN", value: c.businessNumbers.businessNumber },
+          // BN15 = BN9 + program account (e.g. RC0001); the registry only knows the BN9 root
+          digits.length > 9 && digits.startsWith(c.businessNumbers?.businessNumber) && { type: "BN15", value: form.regNumber },
+        ].filter(Boolean),
+        status: c.status,
+        address: a ? join(a.addressLine, a.city, a.provinceCode, a.postalCode) : "",
+        url: `https://ised-isde.canada.ca/cc/lgcy/fdrlCrpDtls.html?corpId=${c.corporationId}`,
+      };
+    });
+  },
   async "orgbook-bc"(form) {
     const d = await getJson(`https://orgbook.gov.bc.ca/api/v4/search/topic?q=${enc(form.regNumber || form.name)}`);
     return (d?.results ?? []).map((r) => {

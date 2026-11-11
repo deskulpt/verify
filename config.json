@@ -496,6 +496,18 @@
       "mode": "auto"
     },
     {
+      "id": "cc-api",
+      "name": "Corporations Canada (federal, ISED API)",
+      "countries": [
+        "CA"
+      ],
+      "mode": "auto",
+      "needs": "regNumber",
+      "needsEnv": [
+        "ISED_API_KEY"
+      ]
+    },
+    {
       "id": "orgbook-bc",
       "name": "OrgBook BC (British Columbia)",
       "countries": [
