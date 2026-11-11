@@ -70,6 +70,16 @@ test("summary confidence", async () => {
   assert.equal(summarize([{ id: "a", mode: "auto", outcome: "not_found" }]).status, "unverified");
 });
 
+test("trademark sources support but never verify on their own", async () => {
+  const { summarize } = await import("./server.mjs");
+  const tm = { id: "euipo-tm", mode: "auto", supporting: true, outcome: "verified" };
+  const s = summarize([tm, { id: "x", mode: "auto", outcome: "inactive" }]);
+  assert.equal(s.status, "inactive");
+  assert.deepEqual(s.verifiedBy, []);
+  assert.deepEqual(s.trademarksIn, ["euipo-tm"]);
+  assert.equal(summarize([{ ...tm, outcome: "inactive" }]).status, "unverified");
+});
+
 test("idMatched only when a given number actually matched", async () => {
   const { judge } = await import("./server.mjs");
   const rec = { legalName: "Acme", status: "Active", ids: [{ type: "LEI", value: "X" }] };

@@ -79,7 +79,8 @@ function renderAuto(r) {
   if (r.skipped) return `<div class="card manual"><b>${esc(r.name)}</b><span class="tag">SKIPPED</span><br><small>${esc(r.skipped)}</small></div>`;
   if (r.match) {
     const m = r.match, live = r.outcome === "verified";
-    return `<div class="card ${live ? "ok" : "warn"}"><b>${esc(r.name)}</b><span class="tag">${live ? "VERIFIED" : "INACTIVE"}</span><br>
+    const tag = r.supporting ? (live ? "TRADEMARK OWNER" : "TRADEMARK NOT REGISTERED") : live ? "VERIFIED" : "INACTIVE";
+    return `<div class="card ${live ? "ok" : "warn"}"><b>${esc(r.name)}</b><span class="tag">${tag}</span><br>
       ${esc(m.legalName ?? r.note)} &middot; ${esc(m.status)}<br>
       <small>${m.ids.map((i) => `${esc(i.type)} ${esc(i.value)}`).join(" &middot; ")}<br>${esc(m.address)}</small><br>
       <a href="${esc(m.url)}" target="_blank" rel="noopener">View record</a></div>`;
@@ -123,7 +124,8 @@ $("#f").addEventListener("submit", async (e) => {
       inactive: "Found, but registered as inactive / dissolved",
       unverified: "Not verified automatically: check the manual sources below",
     }[s.status];
-    const warn = s.status === "verified" && s.inactiveIn.length ? ` &middot; inactive in ${s.inactiveIn.length} other source(s)` : "";
+    const warn = (s.status === "verified" && s.inactiveIn.length ? ` &middot; inactive in ${s.inactiveIn.length} other source(s)` : "")
+      + (s.trademarksIn.length ? " &middot; owns registered trademarks" : "");
     $("#summary").className = `card summary ${{ verified: "ok", inactive: "warn", unverified: "no" }[s.status]}`;
     $("#summary").innerHTML = esc(text) + warn;
     $("#auto").innerHTML = body.results.filter((r) => r.mode === "auto").map(renderAuto).join("");

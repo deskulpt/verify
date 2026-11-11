@@ -119,8 +119,11 @@ Cron, daily 03:00:
 | Singapore ACRA | SG |
 | Brønnøysund Register | NO |
 | Receita Federal via BrasilAPI | BR (needs CNPJ) |
+| EUIPO EU trademarks, by owner name | all (needs EUIPO keys) |
 
-**Manual** (CAPTCHA or no API): Corporations Canada, Canada's Business Registries, ISED company capabilities, MCA name search and find-CIN, DGFT IEC (exporters), QuickCompany, Delaware, California bizfile, SAM.gov, EU BRIS, Receita CNPJ card, UAE NER / FTA TRN / ADGM / DIFC / Dubai Chambers, KvK (NL), Registro Imprese (IT), WKO (AT), Singapore Bizfile, and globally ICC World Chambers, OpenCorporates, GS1 GEPIR, D&B D-U-N-S and directory.
+**Trademarks are supporting evidence only.** Owning a trademark shows a brand, not a registered, active entity, so trademark results never make a check "verified" or "inactive". They appear as TRADEMARK OWNER cards and in `summary.trademarksIn`. USPTO and CIPO have no name-search API (USPTO's TSDR API looks up by serial number only; CIPO publishes bulk CSV), so they are manual links.
+
+**Manual** (CAPTCHA or no API): Corporations Canada, Canada's Business Registries, ISED company capabilities, MCA name search and find-CIN, DGFT IEC (exporters), QuickCompany, Delaware, California bizfile, SAM.gov, USPTO trademark search, CIPO trademarks database, EU BRIS, Receita CNPJ card, UAE NER / FTA TRN / ADGM / DIFC / Dubai Chambers, KvK (NL), Registro Imprese (IT), WKO (AT), Singapore Bizfile, and globally ICC World Chambers, OpenCorporates, GS1 GEPIR, D&B D-U-N-S and directory.
 
 ## Adding a country or source
 
@@ -145,7 +148,7 @@ Add a **manual** source (no code). `{field}` in `url` is filled from the form, U
 
 `countries` takes country codes, a region (`"EU"`), or `"*"` for all. Optional `"when": "exporter"` shows a source only when that form flag is set.
 
-Add an **automatic** source: add the config entry with `"mode": "auto"` (optional `"needs": "taxId"` or `"regNumber"`), then an adapter with the same id in the `auto` object in `server.mjs`. An adapter takes the form and returns candidate records:
+Add an **automatic** source: add the config entry with `"mode": "auto"` (optional `"needs": "taxId"` or `"regNumber"`, `"needsEnv": ["SOME_KEY"]` to skip when a credential is unset, `"supporting": true` to show results without counting toward verification), then an adapter with the same id in the `auto` object in `server.mjs`. An adapter takes the form and returns candidate records:
 
 ```js
 { legalName, aliases?, ids: [{ type, value }], status, active?, address, url }

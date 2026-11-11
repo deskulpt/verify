@@ -504,6 +504,19 @@
       "mode": "auto"
     },
     {
+      "id": "euipo-tm",
+      "name": "EUIPO EU trademarks (owner search)",
+      "countries": [
+        "*"
+      ],
+      "mode": "auto",
+      "supporting": true,
+      "needsEnv": [
+        "EUIPO_CLIENT_ID",
+        "EUIPO_CLIENT_SECRET"
+      ]
+    },
+    {
       "id": "vies",
       "name": "EU VIES VAT validation",
       "countries": [
@@ -868,6 +881,30 @@
       "copy": [
         "name",
         "countryName"
+      ]
+    },
+    {
+      "id": "uspto-tm",
+      "name": "USPTO trademark search (owner name)",
+      "countries": [
+        "US"
+      ],
+      "mode": "manual",
+      "url": "https://tmsearch.uspto.gov/search/search-information",
+      "copy": [
+        "name"
+      ]
+    },
+    {
+      "id": "cipo-tm",
+      "name": "CIPO Canadian Trademarks Database (owner name)",
+      "countries": [
+        "CA"
+      ],
+      "mode": "manual",
+      "url": "https://ised-isde.canada.ca/cipo/trademark-search/srch",
+      "copy": [
+        "name"
       ]
     },
     {

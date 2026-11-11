@@ -47,8 +47,44 @@ async function getJson(url, init = {}) {
 const enc = encodeURIComponent;
 const join = (...parts) => parts.flat().filter(Boolean).join(", ");
 
+// EUIPO OAuth client-credentials token, cached until shortly before expiry.
+let euipoToken = { value: null, until: 0 };
+async function euipoAuth() {
+  const id = process.env.EUIPO_CLIENT_ID, secret = process.env.EUIPO_CLIENT_SECRET;
+  if (!id || !secret) throw new Error("set EUIPO_CLIENT_ID and EUIPO_CLIENT_SECRET (free at dev.euipo.europa.eu)");
+  if (Date.now() < euipoToken.until) return { id, token: euipoToken.value };
+  const t = await getJson("https://euipo.europa.eu/cas-server-webapp/oidc/accessToken", {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ grant_type: "client_credentials", client_id: id, client_secret: secret, scope: "uid" }),
+  });
+  euipoToken = { value: t.access_token, until: Date.now() + ((t.expires_in ?? 600) - 60) * 1000 };
+  return { id, token: t.access_token };
+}
+
 // Each adapter returns candidate records: { legalName, ids: [{type, value}], status, address, url }.
 const auto = {
+  // Trademarks owned by the business (supporting evidence only; see "supporting" in config).
+  async "euipo-tm"(form) {
+    const { id, token } = await euipoAuth();
+    const core = normName(form.name).replace(/["\\]/g, "");
+    // ponytail: case-sensitivity of RSQL "==" is undocumented, so ask for the common casings
+    const variants = [...new Set([core, core.toUpperCase(), core.replace(/\b\w/g, (c) => c.toUpperCase())])].map((v) => `"*${v}*"`);
+    const q = `applicants.name=in=(${variants.join(",")})`;
+    const d = await getJson(`https://api.euipo.europa.eu/trademark-search/trademarks?size=50&query=${enc(q)}`, {
+      headers: { authorization: `Bearer ${token}`, "x-ibm-client-id": id },
+    });
+    return (d?.trademarks ?? []).flatMap((t) =>
+      (t.applicants ?? []).map((a) => ({
+        legalName: a.name,
+        ids: [], // trademark numbers are not company numbers; keep them out of id matching
+        status: `Trademark ${t.status ?? "unknown"} · EUTM ${t.applicationNumber}`,
+        active: t.status === "REGISTERED",
+        address: t.wordMarkSpecification?.verbalElement ? `Mark: ${t.wordMarkSpecification.verbalElement}` : "",
+        url: `https://euipo.europa.eu/eSearch/#details/trademarks/${t.applicationNumber}`,
+      })),
+    );
+  },
   async gleif(form) {
     const base = `https://api.gleif.org/api/v1/lei-records?page[size]=50&filter[entity.legalAddress.country]=${form.country}`;
     // legalName is an exact match and fulltext misses suffix variants ("Ltd" vs "Limited"), so ask both
@@ -313,13 +349,14 @@ export const isActive = (r) => r.active ?? (DEAD.test(r.status ?? "") ? false : 
 
 // One line a caller can act on. high = two sources agree, or one agrees on the number too.
 export function summarize(results) {
-  const auto = results.filter((r) => r.mode === "auto");
+  const auto = results.filter((r) => r.mode === "auto" && !r.supporting); // trademarks prove a brand, not a registered entity
+  const trademarksIn = results.filter((r) => r.supporting && r.outcome === "verified").map((r) => r.id);
   const verifiedBy = auto.filter((r) => r.outcome === "verified").map((r) => r.id);
   const inactiveIn = auto.filter((r) => r.outcome === "inactive").map((r) => r.id);
   const status = verifiedBy.length ? "verified" : inactiveIn.length ? "inactive" : "unverified";
   const confidence =
     status !== "verified" ? "none" : verifiedBy.length >= 2 || auto.some((r) => r.outcome === "verified" && r.idMatched) ? "high" : "medium";
-  return { status, confidence, verifiedBy, inactiveIn, manualChecks: results.filter((r) => r.mode === "manual").length };
+  return { status, confidence, verifiedBy, inactiveIn, trademarksIn, manualChecks: results.filter((r) => r.mode === "manual").length };
 }
 
 async function verify(form) {
@@ -327,8 +364,9 @@ async function verify(form) {
   if (String(form.name ?? "").trim().length < 3) throw Object.assign(new Error("name too short"), { status: 400 });
   const results = await Promise.all(
     sourcesFor(form).map(async (s) => {
-      const base = { id: s.id, name: s.name, mode: s.mode };
+      const base = { id: s.id, name: s.name, mode: s.mode, ...(s.supporting && { supporting: true }) };
       if (s.mode !== "auto") return { ...base, url: s.url, copy: s.copy };
+      if (s.needsEnv?.some((k) => !process.env[k])) return { ...base, skipped: `not configured: set ${s.needsEnv.join(" and ")}` };
       if (s.needs && !form[s.needs]) return { ...base, skipped: `needs ${s.needs === "taxId" ? "a VAT / tax number" : "a registration number"}` };
       try {
         return { ...base, ...judge(form, await auto[s.id](form)) };
